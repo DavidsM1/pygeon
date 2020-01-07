@@ -1,4 +1,5 @@
 import pygame as pg
+vec = pg.math.Vector2
 
 # define some colors (R, G, B)
 WHITE = (255, 255, 255)
@@ -24,10 +25,13 @@ GRIDHEIGHT = HEIGHT / TILESIZE
 
 WALL_IMG_2 = 'wall_2.png'
 WALL_IMG_1 = 'wall_1.png'
+WALL_IMG_CORNER = 'wall_corner.png'
 
 # player settings
-PLAYER_SPEED = 250
+PLAYER_HEALTH = 3
+PLAYER_SPEED = 200
 PLAYER_HIT_RECT = pg.Rect(0, 0, 32, 64)
+BARREL_OFFSET = vec(0, -18)
 
 PLAYER_IMG_S = 'p_s.png'
 PLAYER_IMG_SE = 'p_se.png'
@@ -39,8 +43,20 @@ PLAYER_IMG_E = 'p_e.png'
 PLAYER_IMG_SW = 'p_sw.png'
 
 # MOB settings
-MOB_IMG_S = 'slime.png'
+MOB_IMG = 'enemy_bench.png'
+MOB_SPEED = 100
+MOB_HIT_RECT = pg.Rect(0, 0, 32, 32)
+MOB_HEALTH = 10
+MOB_DAMAGE = 1
+MOB_KNOCKBACK = 20
 
+# gun settings
+BULLET_IMG = 'bullet.png'
+BULLET_SPEED = 300
+BULLET_LIFETIME = 1000
+BULLET_RATE = 400
+GUN_SPREAD = 5
+BULLET_DAMAGE = 1
 
 # directions
 NORTH = 0
@@ -51,3 +67,13 @@ SOUTH = 4
 SOUTHWEST = 5
 WEST = 6
 NORTHWEST = 7
+
+# angles
+ANGLE_EAST = 0
+ANGLE_NORTHEAST = 45
+ANGLE_NORTH = 90
+ANGLE_NORTHWEST = 135
+ANGLE_WEST = 180
+ANGLE_SOUTHWEST = 225
+ANGLE_SOUTH = 270
+ANGLE_SOUTHEAST = 315

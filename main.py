@@ -6,6 +6,24 @@ from sprites import *
 from gameboard import *
 from pygame.locals import *
 
+# HUD functions
+def draw_player_health(surf, x, y, pct):
+    if pct < 0:
+        pct = 0
+    BAR_LENGTH = 100
+    BAR_HEIGHT = 20
+    fill = pct * BAR_LENGTH
+    outline_rect = pg.Rect(x, y, BAR_LENGTH, BAR_HEIGHT)
+    fill_rect = pg.Rect(x, y, fill, BAR_HEIGHT)
+    if pct > 0.6:
+        col = GREEN
+    elif pct > 0.3:
+        col = YELLOW
+    else:
+        col = RED
+    pg.draw.rect(surf, col, fill_rect)
+    pg.draw.rect(surf, WHITE, outline_rect, 2)
+
 class Game:
     def __init__(self):
         pg.init()
@@ -36,10 +54,10 @@ class Game:
         self.player_img_nw = pg.image.load(path.join(img_folder, PLAYER_IMG_NW)).convert_alpha()
         self.player_img_nw = pg.transform.scale(self.player_img_nw, (TILESIZE, TILESIZE * 2))
         self.wall_img_1 = pg.image.load(path.join(img_folder, WALL_IMG_1)).convert_alpha()
-        self.wall_img_1 = pg.transform.scale(self.wall_img_1, (TILESIZE, TILESIZE))
         self.wall_img_2 = pg.image.load(path.join(img_folder, WALL_IMG_2)).convert_alpha()
-        self.mob_img = pg.image.load(path.join(img_folder, MOB_IMG_S)).convert_alpha()
-        self.mob_img = pg.transform.scale(self.mob_img, (TILESIZE, TILESIZE))
+        self.wall_img_corner = pg.image.load(path.join(img_folder, WALL_IMG_CORNER)).convert_alpha()
+        self.mob_img = pg.image.load(path.join(img_folder, MOB_IMG)).convert_alpha()
+        self.bullet_img = pg.image.load(path.join(img_folder, BULLET_IMG)).convert_alpha()
 
     def new(self):
         # initialize all variables and do all the setup for a new game
@@ -47,6 +65,7 @@ class Game:
         self.walls = pg.sprite.Group()
         self.doors = pg.sprite.Group()
         self.mobs = pg.sprite.Group()
+        self.bullets = pg.sprite.Group()
         for row, tiles in enumerate(self.map.data):
             for col, tile in enumerate(tiles):
                 if tile == '1':
@@ -61,6 +80,8 @@ class Game:
                     Wall(self, col, row, 5)
                 if tile == '6':
                     Wall(self, col, row, 6)
+                if tile == '7':
+                    Wall(self, col, row, 7)
                 if tile == 'D':
                     Door(self, col, row)
                 if tile == 'M':
@@ -87,6 +108,20 @@ class Game:
         self.player.enter_door('x', self.camera)
         self.player.enter_door('y', self.camera)
         self.all_sprites.update()
+        # player gets hit
+        hits = pg.sprite.spritecollide(self.player, self.mobs, False, collide_hit_rect)
+        for hit in hits:
+            self.player.health -= MOB_DAMAGE
+            hit.vel = vec(0, 0)
+            if self.player.health <= 0:
+                self.playing = False
+        if hits:
+            self.player.pos += vec(MOB_KNOCKBACK, 0).rotate(-hits[0].rot)
+        # bullets hit mobs
+        hits = pg.sprite.groupcollide(self.mobs, self.bullets, False, True)
+        for hit in hits:
+            hit.health -= BULLET_DAMAGE
+            hit.vel = vec(0, 0)
 
     def draw_grid(self):
         for x in range(0, WIDTH, TILESIZE):
@@ -96,10 +131,12 @@ class Game:
 
     def draw(self):
         self.screen.fill(BGCOLOR)
-        # self.draw_grid()
+        self.draw_grid()
         for sprite in self.all_sprites:
             self.screen.blit(sprite.image, self.camera.apply(sprite))
-        pg.draw.rect(self.screen, WHITE, self.player.hit_rect, 2)
+        # pg.draw.rect(self.screen, WHITE, self.player.hit_rect, 2)
+        # HUD
+        draw_player_health(self.screen, 20, 10, self.player.health / PLAYER_HEALTH)
         pg.display.flip()
 
     def events(self):
