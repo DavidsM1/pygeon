@@ -66,6 +66,7 @@ class Game:
         self.doors = pg.sprite.Group()
         self.mobs = pg.sprite.Group()
         self.bullets = pg.sprite.Group()
+        self.gates = pg.sprite.Group()
         for row, tiles in enumerate(self.map.data):
             for col, tile in enumerate(tiles):
                 if tile == '1':
@@ -88,7 +89,9 @@ class Game:
                     Mob(self, col, row)
                 if tile == 'P':
                     self.player = Player(self, col, row)
-        self.camera = Camera(self.map.width, self.map.height)
+                if tile == 'G':
+                    Gate(self, col, row)
+        self.camera = Camera(self, WIDTH, HEIGHT)
 
     def run(self):
         # game loop - set self.playing = False to end the game

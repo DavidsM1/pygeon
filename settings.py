@@ -46,7 +46,7 @@ PLAYER_IMG_SW = 'p_sw.png'
 MOB_IMG = 'enemy_bench.png'
 MOB_SPEED = 100
 MOB_HIT_RECT = pg.Rect(0, 0, 32, 32)
-MOB_HEALTH = 10
+MOB_HEALTH = 1
 MOB_DAMAGE = 1
 MOB_KNOCKBACK = 20
 

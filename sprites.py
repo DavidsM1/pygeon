@@ -140,9 +140,11 @@ class Player(pg.sprite.Sprite):
                 if self.vel.x > 0:
                     self.pos.x += TILESIZE * 5
                     camera.update('right')
+
                 if self.vel.x < 0:
                     self.pos.x -= TILESIZE * 5
                     camera.update('left')
+
         if dir == 'y':
             enters = pg.sprite.spritecollide(self, self.game.doors, False, collide_hit_rect)
             if enters:
@@ -161,8 +163,10 @@ class Player(pg.sprite.Sprite):
         self.rect.center = self.pos
         self.hit_rect.centerx = self.pos.x
         collide_with_walls(self, self.game.walls, 'x')
+        collide_with_walls(self, self.game.gates, 'x')
         self.hit_rect.centery = self.pos.y
         collide_with_walls(self, self.game.walls, 'y')
+        collide_with_walls(self, self.game.gates, 'y')
         self.rect.center = self.hit_rect.center
 
 class Mob(pg.sprite.Sprite):
@@ -180,23 +184,31 @@ class Mob(pg.sprite.Sprite):
         self.rect.center = self.pos
         self.rot = 0
         self.health = MOB_HEALTH
+        self.visible = False
 
     def update(self):
-        self.rot = (self.game.player.pos - self.pos).angle_to(vec(1, 0))
-        self.image = pg.transform.rotate(self.game.mob_img, self.rot)
-        self.rect = self.image.get_rect()
-        self.rect.center = self.pos
-        self.acc = vec(MOB_SPEED, 0).rotate(-self.rot)
-        self.acc += self.vel * -1
-        self.vel += self.acc * self.game.dt
-        self.pos += self.vel * self.game.dt + 0.5 * self.acc * self.game.dt ** 2 #equation of motion
-        self.hit_rect.centerx = self.pos.x
-        collide_with_walls(self, self.game.walls, 'x')
-        self.hit_rect.centery = self.pos.y
-        collide_with_walls(self, self.game.walls, 'y')
-        self.rect.center = self.hit_rect.center
-        if self.health <= 0:
-            self.kill()
+        if self.visible:
+            self.rot = (self.game.player.pos - self.pos).angle_to(vec(1, 0))
+            self.image = pg.transform.rotate(self.game.mob_img, self.rot)
+            self.rect = self.image.get_rect()
+            self.rect.center = self.pos
+            self.acc = vec(MOB_SPEED, 0).rotate(-self.rot)
+            self.acc += self.vel * -1
+            self.vel += self.acc * self.game.dt
+            self.pos += self.vel * self.game.dt + 0.5 * self.acc * self.game.dt ** 2 #equation of motion
+            self.hit_rect.centerx = self.pos.x
+            collide_with_walls(self, self.game.walls, 'x')
+            collide_with_walls(self, self.game.gates, 'x')
+            self.hit_rect.centery = self.pos.y
+            collide_with_walls(self, self.game.walls, 'y')
+            collide_with_walls(self, self.game.gates, 'y')
+            self.rect.center = self.hit_rect.center
+            if self.health <= 0:
+                self.kill()
+                self.game.camera.visible_enemies -= 1
+                if self.game.camera.visible_enemies < 0:
+                    self.game.camera.visible_enemies = 0
+                print("visible enemies ", self.game.camera.visible_enemies)
 
 class Bullet(pg.sprite.Sprite):
     def __init__(self, game, pos, dir):
@@ -260,3 +272,22 @@ class Door(pg.sprite.Sprite):
         self.y = y
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
+
+class Gate(pg.sprite.Sprite):
+    def __init__(self, game, x, y):
+        self.groups = game.all_sprites, game.gates
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.image = pg.Surface((TILESIZE, TILESIZE))
+        self.image.fill(GREEN)
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
+        self.pos = vec(x, y) * TILESIZE
+        self.visible = False
+
+    def update(self):
+        if self.game.camera.visible_enemies == 0 and self.visible:
+            self.kill()
