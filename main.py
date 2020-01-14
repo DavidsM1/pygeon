@@ -36,7 +36,8 @@ class Game:
     def load_data(self):
         game_folder = path.dirname(__file__)
         img_folder = path.join(game_folder, 'img')
-        self.map = Map(path.join(game_folder, 'map.txt'))
+        map_folder = path.join(game_folder, 'maps')
+        self.map = Map(path.join(map_folder, 'map.txt'))
         self.player_img_s = pg.image.load(path.join(img_folder, PLAYER_IMG_S)).convert_alpha()
         self.player_img_s = pg.transform.scale(self.player_img_s, (TILESIZE, TILESIZE * 2))
         self.player_img_n = pg.image.load(path.join(img_folder, PLAYER_IMG_N)).convert_alpha()
@@ -53,7 +54,22 @@ class Game:
         self.player_img_ne = pg.transform.scale(self.player_img_ne, (TILESIZE, TILESIZE * 2))
         self.player_img_nw = pg.image.load(path.join(img_folder, PLAYER_IMG_NW)).convert_alpha()
         self.player_img_nw = pg.transform.scale(self.player_img_nw, (TILESIZE, TILESIZE * 2))
+
         self.wall_img_1 = pg.image.load(path.join(img_folder, WALL_IMG_1)).convert_alpha()
+
+        self.pillar_img_s = pg.image.load(path.join(img_folder, PILLAR_S)).convert_alpha()
+        self.pillar_img_n = pg.image.load(path.join(img_folder, PILLAR_N)).convert_alpha()
+        self.pillar_img_e = pg.image.load(path.join(img_folder, PILLAR_E)).convert_alpha()
+        self.pillar_img_w = pg.image.load(path.join(img_folder, PILLAR_W)).convert_alpha()
+
+        self.door_img_h = pg.image.load(path.join(img_folder, DOORS_H)).convert_alpha()
+        self.door_img_v = pg.image.load(path.join(img_folder, DOORS_V)).convert_alpha()
+
+        self.pillar_wall_img_h = pg.image.load(path.join(img_folder, PILLAR_WALL_H)).convert_alpha()
+        self.pillar_wall_img_v = pg.image.load(path.join(img_folder, PILLAR_WALL_V)).convert_alpha()
+
+        self.floor_img = pg.image.load(path.join(img_folder, FLOOR_IMG)).convert_alpha()
+
         self.wall_img_2 = pg.image.load(path.join(img_folder, WALL_IMG_2)).convert_alpha()
         self.wall_img_corner = pg.image.load(path.join(img_folder, WALL_IMG_CORNER)).convert_alpha()
         self.mob_img = pg.image.load(path.join(img_folder, MOB_IMG)).convert_alpha()
@@ -67,6 +83,7 @@ class Game:
         self.mobs = pg.sprite.Group()
         self.bullets = pg.sprite.Group()
         self.gates = pg.sprite.Group()
+        self.floor = pg.sprite.Group()
         for row, tiles in enumerate(self.map.data):
             for col, tile in enumerate(tiles):
                 if tile == '1':
@@ -83,8 +100,22 @@ class Game:
                     Wall(self, col, row, 6)
                 if tile == '7':
                     Wall(self, col, row, 7)
+                if tile == '8':
+                    Wall(self, col, row, 8)
+                if tile == '9':
+                    Wall(self, col, row, 9)
+                if tile == '0':
+                    Wall(self, col, row, 0)
+                if tile == '-':
+                    Wall(self, col, row, '-')
+                if tile == '=':
+                    Wall(self, col, row, '=')
+                if tile == 'Q':
+                    Wall(self, col, row, 'Q')
                 if tile == 'D':
                     Door(self, col, row)
+                if tile == 'B':
+                    Door(self, col, row, 1)
                 if tile == 'M':
                     Mob(self, col, row)
                 if tile == 'P':
@@ -128,9 +159,9 @@ class Game:
 
     def draw_grid(self):
         for x in range(0, WIDTH, TILESIZE):
-            pg.draw.line(self.screen, LIGHTGREY, (x, 0), (x, HEIGHT))
+            pg.draw.line(self.screen, DARKGREEN, (x, 0), (x, HEIGHT))
         for y in range(0, HEIGHT, TILESIZE):
-            pg.draw.line(self.screen, LIGHTGREY, (0, y), (WIDTH, y))
+            pg.draw.line(self.screen, DARKGREEN, (0, y), (WIDTH, y))
 
     def draw(self):
         self.screen.fill(BGCOLOR)

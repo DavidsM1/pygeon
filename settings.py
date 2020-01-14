@@ -11,21 +11,38 @@ RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
 BROWN = (106, 55, 5)
+DARKGREEN = (33, 85, 85)
+OLIVEGREEN = (67,120,29)
 
 # game settings
 WIDTH = 1024   # tilesize * 32  32 bloki pa labi
 HEIGHT = 576   # tilesize * 18   18 bloki uz leju
 FPS = 60
 TITLE = 'Pygeon'
-BGCOLOR = BROWN
+BGCOLOR = OLIVEGREEN
 
 TILESIZE = 32
 GRIDWIDTH = WIDTH / TILESIZE
 GRIDHEIGHT = HEIGHT / TILESIZE
 
-WALL_IMG_2 = 'wall_2.png'
-WALL_IMG_1 = 'wall_1.png'
+WALL_IMG_2 = 'wall_2_s.png'
+
+WALL_IMG_1 = 'wall_1_h.png'
+
+PILLAR_S = 'pillar_s.png'
+PILLAR_N = 'pillar_n.png'
+PILLAR_E = 'pillar_e.png'
+PILLAR_W = 'pillar_w.png'
+
+PILLAR_WALL_H = 'pillar_wall_h.png'
+PILLAR_WALL_V = 'pillar_wall_v.png'
+
+FLOOR_IMG = 'floor.png'
+
 WALL_IMG_CORNER = 'wall_corner.png'
+
+DOORS_H = 'doors_h.png'
+DOORS_V = 'doors_v.png'
 
 # player settings
 PLAYER_HEALTH = 3

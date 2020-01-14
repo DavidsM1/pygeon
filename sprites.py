@@ -252,6 +252,18 @@ class Wall(pg.sprite.Sprite):
             self.image = pg.transform.rotate(self.image, 90)
         elif type == 7:
             self.image = game.wall_img_corner
+        elif type == 8:
+            self.image = game.pillar_img_s
+        elif type == 9:
+            self.image = game.pillar_img_n
+        elif type == 0:
+            self.image = game.pillar_img_e
+        elif type == '-':
+            self.image = game.pillar_img_w
+        elif type == '=':
+            self.image = game.pillar_wall_img_h
+        elif type == 'Q':
+            self.image = game.pillar_wall_img_v
         else:
             self.image = game.wall_img_1
         self.rect = self.image.get_rect()
@@ -261,12 +273,26 @@ class Wall(pg.sprite.Sprite):
         self.rect.y = y * TILESIZE
 
 class Door(pg.sprite.Sprite):
-    def __init__(self, game, x, y):
+    def __init__(self, game, x, y, vertical = 0):
         self.groups = game.all_sprites, game.doors
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.image = pg.Surface((TILESIZE, TILESIZE))
-        self.image.fill(BLUE)
+        if vertical:
+            self.image = game.door_img_v
+        else:
+            self.image = game.door_img_h
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
+
+class Floor(pg.sprite.Sprite):
+    def __init__(self, game, x, y):
+        self.groups = game.all_sprites, game.floor
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.image = game.floor_img
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
@@ -279,7 +305,7 @@ class Gate(pg.sprite.Sprite):
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
         self.image = pg.Surface((TILESIZE, TILESIZE))
-        self.image.fill(GREEN)
+        self.image.fill(DARKGREEN)
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
