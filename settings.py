@@ -45,7 +45,7 @@ DOORS_H = 'doors_h.png'
 DOORS_V = 'doors_v.png'
 
 # player settings
-PLAYER_HEALTH = 3
+PLAYER_HEALTH = 10
 PLAYER_SPEED = 200
 PLAYER_HIT_RECT = pg.Rect(0, 0, 32, 64)
 BARREL_OFFSET = vec(0, 0)
@@ -63,14 +63,14 @@ PLAYER_IMG_SW = 'p_sw.png'
 MOB_IMG = 'enemy_bench.png'
 MOB_SPEEDS = [100, 125, 75, 150]
 MOB_HIT_RECT = pg.Rect(0, 0, 32, 32)
-MOB_HEALTH = 10
+MOB_HEALTH = 2
 MOB_DAMAGE = 1
 MOB_KNOCKBACK = 20
 AVOID_RADIUS = 50
 
 # BOSS settings
 BOSS_IMG = 'boss_couch.png'
-BOSS_HEALTH = 1
+BOSS_HEALTH = 20
 BOSS_DAMAGE = 1
 BOSS_HIT_RECT = pg.Rect(0, 0, 384, 192)
 BOSS_KNOCKBACK = 60
@@ -85,7 +85,7 @@ BOSS_BAR_HEIGHT = 20
 SLIME_IMG = 'enemy_slime.png'
 SLIME_SPEED = 160
 SLIME_HIT_RECT = pg.Rect(0, 0, 32, 32)
-SLIME_HEALTH = 8
+SLIME_HEALTH = 3
 SLIME_DAMAGE = 1
 SLIME_KNOCKBACK = 0
 # gun settings

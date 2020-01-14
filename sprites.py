@@ -273,13 +273,13 @@ class Boss(pg.sprite.Sprite):
                 dir = vec(1, 0).rotate(-self.rot)
                 pos = self.pos + BARREL_OFFSET.rotate(-self.rot)
                 BossBullet(self.game, pos, dir)
-                dir = vec(1,0).rotate(-self.rot + 20)
+                dir = vec(1,0).rotate(-self.rot + 25)
                 BossBullet(self.game, pos, dir)
-                dir = vec(1,0).rotate(-self.rot - 20)
+                dir = vec(1,0).rotate(-self.rot - 25)
                 BossBullet(self.game, pos, dir)
-                dir = vec(1,0).rotate(-self.rot - 40)
+                dir = vec(1,0).rotate(-self.rot - 50)
                 BossBullet(self.game, pos, dir)
-                dir = vec(1,0).rotate(-self.rot + 40)
+                dir = vec(1,0).rotate(-self.rot + 50)
                 BossBullet(self.game, pos, dir)
 class Slime(pg.sprite.Sprite):
     def __init__(self, game, x, y):
