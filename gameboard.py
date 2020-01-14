@@ -6,16 +6,8 @@ def collide_hit_rect(one, two):
     return one.hit_rect.colliderect(two.rect)
 
 def check_visibility(entity, camera):
-    #print("camera.x ", camera.x)
-    #print("mob.pos.x ", mob.pos.x)
-    #print("camera.x + WIDTH ", camera.x + WIDTH)
-    #print("camera.y ", camera.y)
-    #print("mob.pos.y ", mob.pos.y)
-    #print("camera.y + HEIGHT ", camera.y + HEIGHT)
     if (camera.x < entity.pos.x < camera.x + WIDTH) and (camera.y < entity.pos.y < camera.y + HEIGHT):
-        #print("returned true")
         return True
-    #print("returned false")
     return False
 
 
@@ -60,7 +52,18 @@ class Camera:
         for gate in self.game.gates:
             if check_visibility(gate, self):
                 gate.visible = True
-
+        for slime in self.game.slimes:
+            if check_visibility(slime, self):
+                slime.visible = True
+                self.visible_enemies += 1
+            else:
+                slime.visible = False
+        for boss in self.game.bosses:
+            if check_visibility(boss, self):
+                boss.visible = True
+                self.visible_enemies += 1
+            else:
+                boss.visible = False
     def apply(self, entity):
         return entity.rect.move(self.camera.topleft)
 
@@ -82,10 +85,23 @@ class Camera:
             if check_visibility(mob, self):
                 mob.visible = True
                 self.visible_enemies += 1
-                print("visible enemies ", self.visible_enemies)
             else:
                 mob.visible = False
-                
+
         for gate in self.game.gates:
             if check_visibility(gate, self):
                 gate.visible = True
+
+        for slime in self.game.slimes:
+            if check_visibility(slime, self):
+                slime.visible = True
+                self.visible_enemies += 1
+            else:
+                slime.visible = False
+
+        for boss in self.game.bosses:
+            if check_visibility(boss, self):
+                boss.visible = True
+                self.visible_enemies += 1
+            else:
+                boss.visible = False
